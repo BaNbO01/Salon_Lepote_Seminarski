@@ -64,7 +64,7 @@ jobs:
           context: ./Seminarski/front
           push: true
           tags: ghcr.io/banbo01/salon_lepote-frontend:latest
-    deploy:
+  deploy:
     name: Trigger Render Deployment
     needs: build-and-push
     runs-on: ubuntu-latest
