@@ -20,6 +20,7 @@ const Navbar = ({ onLogout }) => {
     klijent: [
       { name: "Usluge", path: "/services" },
       { name: "Moje Rezervacije", path: "/my-bookings" },
+      { name: "Lokacija", path: "/location" },
     ],
     zaposleni: [
       { name: "Usluge", path: "/services" },
