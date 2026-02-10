@@ -9,6 +9,7 @@ import BookingModal from "../components/BookingModal";
 import { useAuth } from "../hooks/useAuth";
 import Button from "../components/Button";
 import { useBookings } from "../hooks/useBookings";
+import { useExchangeRates } from "../hooks/useExchangeRates";
 
 const ServicesList = () => {
   const navigate = useNavigate();
@@ -37,6 +38,31 @@ const ServicesList = () => {
   });
 
   const { selectedService, setSelectedService } = useBookings();
+
+  const { rates, selectedCurrency, setSelectedCurrency } = useExchangeRates();
+
+  const popularCurrencies = [
+    "RSD",
+    "EUR",
+    "USD",
+    "GBP",
+    "CHF",
+    "AUD",
+    "CAD",
+    "JPY",
+    "HRK",
+    "BAM",
+    "HUF",
+    "SEK",
+    "NOK",
+    "TRY",
+    "RUB",
+    "CNY",
+    "AED",
+    "KWD",
+    "PLN",
+    "DKK",
+  ];
 
   const getButtonProps = () => {
     if (user.type === "vlasnica") return "IZMENI";
@@ -78,6 +104,11 @@ const ServicesList = () => {
           filters={filters}
           onFilterChange={handleFilterChange}
           maxPrice={absoluteMaxPrice}
+          currencies={popularCurrencies}
+          selectedCurrency={selectedCurrency}
+          onCurrencyChange={setSelectedCurrency}
+          rate={rates[selectedCurrency] || 1}
+          userType={user.type}
         />
       ) : (
         <div className="mb-10 bg-white p-10 rounded-[2rem] border border-pink-50 shadow-sm">
@@ -101,6 +132,8 @@ const ServicesList = () => {
                 service={service}
                 onAction={() => handleAction(service)}
                 actionLabel={getButtonProps()}
+                currency={selectedCurrency}
+                rate={rates[selectedCurrency] || 1}
               />
             ))}
           </div>

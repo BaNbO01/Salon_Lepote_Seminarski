@@ -2,7 +2,21 @@ import React from "react";
 import FormInput from "./FormInput";
 import FormSelect from "./FormSelect";
 
-const ServiceHeader = ({ filters, onFilterChange, maxPrice = 10000 }) => {
+const ServiceHeader = ({
+  filters,
+  onFilterChange,
+  maxPrice = 10000,
+  currencies = [],
+  selectedCurrency = "RSD",
+  onCurrencyChange,
+  rate = 1,
+  userType,
+}) => {
+  const formatDisplayPrice = (price) => {
+    const converted = price * rate;
+    return `${converted.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })} ${selectedCurrency}`;
+  };
+
   return (
     <div className="mb-10 bg-white rounded-[2rem] shadow-xl shadow-pink-100/20 border border-pink-50 overflow-hidden">
       <div className="p-8 md:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
@@ -15,14 +29,31 @@ const ServiceHeader = ({ filters, onFilterChange, maxPrice = 10000 }) => {
           </p>
         </div>
 
-        <div className="w-full lg:w-96 relative">
-          <FormInput
-            placeholder="Pronađi tretman (npr. manikir)..."
-            name="naziv"
-            value={filters.naziv}
-            onChange={onFilterChange}
-            className="!mb-0 shadow-sm"
-          />
+        <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+          {userType === "klijent" && (
+            <div className="w-full sm:w-32">
+              <FormSelect
+                label="Valuta"
+                value={selectedCurrency}
+                onChange={(e) => onCurrencyChange(e.target.value)}
+                className="!mb-0 shadow-sm"
+                options={currencies.map((curr) => ({
+                  value: curr,
+                  label: curr,
+                }))}
+              />
+            </div>
+          )}
+
+          <div className="w-full lg:w-96 relative">
+            <FormInput
+              placeholder="Pronađi tretman (npr. manikir)..."
+              name="naziv"
+              value={filters.naziv}
+              onChange={onFilterChange}
+              className="!mb-0 shadow-sm"
+            />
+          </div>
         </div>
       </div>
 
@@ -46,7 +77,7 @@ const ServiceHeader = ({ filters, onFilterChange, maxPrice = 10000 }) => {
                 Budžet do
               </span>
               <span className="text-sm font-bold text-pink-800 bg-pink-100 px-2 py-0.5 rounded-lg">
-                {Number(filters.max_cena || maxPrice).toLocaleString()} RSD
+                {formatDisplayPrice(filters.max_cena || maxPrice)}
               </span>
             </div>
             <div className="px-2">
@@ -61,8 +92,8 @@ const ServiceHeader = ({ filters, onFilterChange, maxPrice = 10000 }) => {
                 className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-pink-600 hover:accent-pink-700 transition-all"
               />
               <div className="flex justify-between text-[9px] text-gray-300 mt-2 font-bold uppercase">
-                <span>0 RSD</span>
-                <span>{maxPrice.toLocaleString()} RSD</span>
+                <span>0 {selectedCurrency}</span>
+                <span>{formatDisplayPrice(maxPrice)}</span>
               </div>
             </div>
           </div>

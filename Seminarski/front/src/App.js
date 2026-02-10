@@ -19,6 +19,7 @@ import WeeklySchedule from "./pages/WeeklySchedule";
 import EmployeeSchedule from "./pages/EmployeeSchedule";
 import ClientBookings from "./pages/ClientBookings";
 import EmployeeDailySchedule from "./pages/EmployeeDailySchedule";
+import Location from "./pages/Location";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -55,6 +56,7 @@ function App() {
               path="/my-daily-schedule"
               element={<EmployeeDailySchedule />}
             />
+            <Route path="/location" element={<Location />} />
 
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

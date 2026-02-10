@@ -1,7 +1,23 @@
 import React from "react";
 import Button from "./Button";
 
-const ServiceCard = ({ service, onAction, actionLabel = "" }) => {
+const ServiceCard = ({
+  service,
+  onAction,
+  actionLabel = "",
+  currency = "RSD",
+  rate = 1,
+}) => {
+  const izracunataCena = service.cena_raw * rate;
+
+  const formatiranaCena =
+    currency === "RSD"
+      ? Math.round(izracunataCena).toLocaleString()
+      : izracunataCena.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+
   return (
     <div className="bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-50 flex flex-col justify-between group h-full">
       <div>
@@ -22,9 +38,16 @@ const ServiceCard = ({ service, onAction, actionLabel = "" }) => {
       </div>
 
       <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-        <span className="text-lg font-black text-gray-900">
-          {service.cena_formatirano}
-        </span>
+        <div className="flex flex-col">
+          <span className="text-[10px] font-black uppercase text-gray-400 tracking-tighter">
+            Cena u {currency}
+          </span>
+          <span className="text-xl font-black text-gray-900">
+            {formatiranaCena}{" "}
+            <span className="text-sm font-bold text-pink-700">{currency}</span>
+          </span>
+        </div>
+
         {actionLabel && (
           <Button size="sm" onClick={onAction} className="!rounded-xl">
             {actionLabel}
